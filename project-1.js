@@ -16,7 +16,7 @@ export class project1 extends DDDSuper(I18NMixin(LitElement)) {
 
   static get tag() {
     return "project-1";
-  }
+  }  
 
   constructor() {
     super();
