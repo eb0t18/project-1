@@ -13,10 +13,7 @@ export class HaxSearch extends LitElement {
     this.jsonUrl = 'https://haxtheweb.org/site.json';
     this.baseUrl = this.noJsonEnding(this.jsonUrl);
   }
-  
-  noJsonEnding(url) {
-    return url.replace(/\/?[^\/]*\.json$/, '');
-  }
+
 
   static get properties() {
     return {
@@ -74,7 +71,7 @@ export class HaxSearch extends LitElement {
       <h2>${this.title}</h2>
         <div class="search-wrapper">
           <input id="input" class="analyze-input" placeholder="https://haxtheweb.org/site.json" @input="${this.inputChanged}" />
-          <div class="search-icon"><button @click="${this.analyze}">Analyze</button></div>
+          <div class="search-button"><button @click="${this.analyze}">Analyze</button></div>
         </div>
         <div class="results">
         ${this.items.map((item) => {
@@ -110,7 +107,9 @@ export class HaxSearch extends LitElement {
       console.log(this.items);
     }
   }
-
+  noJsonEnding(url) {
+    return url.replace(/\/?[^\/]*\.json$/, '');
+  }
   updateResults(value) {
     this.loading = true;
     this.baseUrl = this.noJsonEnding(this.jsonUrl);

@@ -42,16 +42,12 @@ export class HaxImage extends LitElement {
         height: 512px;
       }
   
-      .card:hover {
-        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
-        background-color: var(--ddd-theme-default-skyMaxLight);
+      img {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+        border-radius: 8px;
       }
-
-      .card:focus {
-        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
-        background-color: var(--ddd-theme-default-navy40        );
-      }
-  
       .image-container {
         width: 100%;
         aspect-ratio: 1.618; 
@@ -64,11 +60,14 @@ export class HaxImage extends LitElement {
         margin-bottom: 16px;
       }
   
-      img {
-        width: 100%;
-        height: auto;
-        object-fit: cover;
-        border-radius: 8px;
+      .card:focus {
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+        background-color: var(--ddd-theme-default-navy40        );
+      }
+  
+      .card:hover {
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+        background-color: var(--ddd-theme-default-skyMaxLight);
       }
   
       .info {
@@ -81,7 +80,7 @@ export class HaxImage extends LitElement {
         line-height: var(--ddd-lh-auto);
       }
   
-      .secondary {
+      .text {
         font-size: var(--ddd-font-size-m);
         font: var(--ddd-font-primary);
         font-weight: var(--ddd-font-weight-regular);
@@ -91,7 +90,7 @@ export class HaxImage extends LitElement {
         text-align: center;
       }
   
-      /*.metadata {
+      /*.meta {
         font-size: var(--ddd-font-size-xxs);
         color: var(--ddd-theme-default-navy-40);
         margin-top: 8px;
@@ -124,7 +123,7 @@ export class HaxImage extends LitElement {
           <img src="${this.baseURL}/${this.logo}" alt="${this.title}" />
         </div>
         <div class="info">${this.title}</div>
-        <div class="secondary">${this.description}</div>
+        <div class="text">${this.description}</div>
       </div>
     `;
   }
