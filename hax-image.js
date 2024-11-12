@@ -40,13 +40,17 @@ export class HaxImage extends LitElement {
         background-color: var(--ddd-theme-default-potential0);
         border: 2px solid var(--ddd-theme-default-potentialMidnight);
         height: 512px;
+
+      }
+
+      .card:focus {
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+        background-color: var(--ddd-theme-default-navy40        );
       }
   
-      img {
-        width: 100%;
-        height: auto;
-        object-fit: cover;
-        border-radius: 8px;
+      .card:hover {
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+        background-color: var(--ddd-theme-default-skyMaxLight);
       }
       .image-container {
         width: 100%;
@@ -58,18 +62,15 @@ export class HaxImage extends LitElement {
         align-items: center;
         justify-content: center;
         margin-bottom: 16px;
+     
       }
-  
-      .card:focus {
-        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
-        background-color: var(--ddd-theme-default-navy40        );
+      img {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+        border-radius: 8px;
+        height: auto;
       }
-  
-      .card:hover {
-        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
-        background-color: var(--ddd-theme-default-skyMaxLight);
-      }
-  
       .info {
         margin-top: var(--ddd-spacing-3);
         font-size: var(--ddd-font-size-xl);
@@ -78,6 +79,7 @@ export class HaxImage extends LitElement {
         color: var(--ddd-theme-default-navy80);
         text-align: center;
         line-height: var(--ddd-lh-auto);
+        
       }
   
       .text {
@@ -90,8 +92,8 @@ export class HaxImage extends LitElement {
         text-align: center;
       }
   
-      /*.meta {
-        font-size: var(--ddd-font-size-xxs);
+      .metadata {
+        font-size: 12px;
         color: var(--ddd-theme-default-navy-40);
         margin-top: 8px;
         font-style: italic;
@@ -106,12 +108,16 @@ export class HaxImage extends LitElement {
           padding: 12px;
           height: auto; 
         }
-      }*/
+      }
     `;
   }
   
 
   render() {
+    
+    if (this.logo == '') {
+      this.logo = "/files/HAX.psu%20World%20changer-circle1.png";//This changes the default image for empty strings
+  }
     return html`
       <div
         class="card"
@@ -124,6 +130,8 @@ export class HaxImage extends LitElement {
         </div>
         <div class="info">${this.title}</div>
         <div class="text">${this.description}</div>
+        ${this.created ? html`<div class="metadata">Created: ${this.created}</div>` : ``}
+        ${this.lastUpdated ? html`<div class="metadata">Last Updated: ${this.lastUpdated}</div>` : ``}
       </div>
     `;
   }

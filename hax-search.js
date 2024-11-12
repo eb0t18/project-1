@@ -64,21 +64,31 @@ export class HaxSearch extends LitElement {
     `;
   }
 
+  analyze(e)
+  {
+    this.jsonUrl = this.shadowRoot.querySelector('#input').value;
+
+  }
+
 
   render() {
    
     return html`
       <h2>${this.title}</h2>
         <div class="search-wrapper">
-          <input id="input" class="analyze-input" placeholder="https://haxtheweb.org/site.json" @input="${this.inputChanged}" />
+          <input id="input" class="analyze-input" placeholder="https://haxtheweb.org/site.json" />
           <div class="search-button"><button @click="${this.analyze}">Analyze</button></div>
         </div>
         <div class="results">
         ${this.items.map((item) => {
+          const created = item.metadata ? new Date(parseInt(item.metadata.created) * 1000).toLocaleDateString() : '';
+          const updated = item.metadata ? new Date(parseInt(item.metadata.updated) * 1000).toLocaleDateString() : '';
           const img = item.metadata && item.metadata.files && item.metadata.files[0] ? item.metadata.files[0].url : '';
 
           return html`
             <hax-card
+              created="${created}"
+              lastUpdated="${updated}"
               title="${item.title}"
               description="${item.description}"
               logo="${img}"
@@ -93,7 +103,7 @@ export class HaxSearch extends LitElement {
   }
 
   inputChanged(e) {
-    this.value = this.shadowRoot.querySelector('#input').value;
+    this.jsonUrl = this.shadowRoot.querySelector('#input').value;
   }
 
   updated(changedProperties) {
@@ -116,13 +126,8 @@ export class HaxSearch extends LitElement {
     fetch(this.jsonUrl)
       .then(response => response.ok ? response.json() : {})
       .then(data => {
-        if (data && Array.isArray(data.items)) {
-          this.items = data.items.filter(item => 
-            item.title.toLowerCase().includes(value.toLowerCase()) ||
-            item.description.toLowerCase().includes(value.toLowerCase())
-          );
-        }
-        this.loading = false;
+          this.items = data.items
+          this.loading = false;
       });
   }
 
