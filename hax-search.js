@@ -2,7 +2,7 @@ import { LitElement, html, css } from 'lit';
 import { DDDSuper } from "@haxtheweb/d-d-d/d-d-d.js";
 import "./hax-image.js";
 
-export class HaxSearch extends LitElement {
+export class HaxSearch extends DDDSuper(LitElement) {
   
   constructor() {
     super();
@@ -10,7 +10,7 @@ export class HaxSearch extends LitElement {
     this.title = '';
     this.loading = false;
     this.items = [];
-    this.jsonUrl = 'https://haxtheweb.org/site.json';
+    this.jsonUrl = '';
     this.baseUrl = this.noJsonEnding(this.jsonUrl);
   }
 
@@ -27,7 +27,7 @@ export class HaxSearch extends LitElement {
   }
 
   static get styles() {
-    return css`
+    return [super.styles, css`
       :host {
         display: block;
       }
@@ -61,7 +61,7 @@ export class HaxSearch extends LitElement {
         line-height: var(--ddd-lh-auto);
         width: 100%;
       }
-    `;
+    `];
   }
 
   analyze(e)
@@ -86,6 +86,7 @@ export class HaxSearch extends LitElement {
           const img = item.metadata && item.metadata.files && item.metadata.files[0] ? item.metadata.files[0].url : '';
 
           return html`
+            
             <hax-card
               created="${created}"
               lastUpdated="${updated}"
@@ -107,9 +108,9 @@ export class HaxSearch extends LitElement {
   }
 
   updated(changedProperties) {
-    if (changedProperties.has('value')) {
-      this.updateResults(this.value);
-    } else if (changedProperties.has('value') && !this.value) {
+    if (changedProperties.has('jsonUrl')) {
+      this.updateResults(this.jsonUrl);
+    } else if (changedProperties.has('jsonUrl') && !this.value) {
       this.items = [];
     }
 

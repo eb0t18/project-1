@@ -2,7 +2,7 @@ import { LitElement, html, css } from "lit";
 import { DDDSuper } from "@haxtheweb/d-d-d/d-d-d.js";
 
 
-export class HaxImage extends LitElement {
+export class HaxImage extends DDDSuper(LitElement) {
 
   constructor() {
     super();
@@ -28,7 +28,7 @@ export class HaxImage extends LitElement {
   }
 
   static get styles() {
-    return css`
+    return [super.styles, css`
       .card {
         display: inline-flex;
         flex-direction: column;
@@ -40,17 +40,20 @@ export class HaxImage extends LitElement {
         background-color: var(--ddd-theme-default-potential0);
         border: 2px solid var(--ddd-theme-default-potentialMidnight);
         height: 512px;
+        text-decoration: none;
 
       }
 
       .card:focus {
         box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
-        background-color: var(--ddd-theme-default-navy40        );
+        background-color: var(--ddd-theme-default-navy40);
+        text-decoration:none;
       }
   
       .card:hover {
         box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
         background-color: var(--ddd-theme-default-skyMaxLight);
+        text-decoration: none;
       }
       .image-container {
         width: 100%;
@@ -109,7 +112,7 @@ export class HaxImage extends LitElement {
           height: auto; 
         }
       }
-    `;
+    `];
   }
   
 
@@ -119,11 +122,11 @@ export class HaxImage extends LitElement {
       this.logo = "/files/HAX.psu%20World%20changer-circle1.png";//This changes the default image for empty strings
   }
     return html`
-      <div
+      <a
         class="card"
         tabindex="0"
-        @click="${this.openWindow}"
-        @keyup="${this.enter}"
+        href="${this.baseURL+'/'+this.slug}"
+        target="_blank"
       >
         <div class="image-container">
           <img src="${this.baseURL}/${this.logo}" alt="${this.title}" />
@@ -132,20 +135,10 @@ export class HaxImage extends LitElement {
         <div class="text">${this.description}</div>
         ${this.created ? html`<div class="metadata">Created: ${this.created}</div>` : ``}
         ${this.lastUpdated ? html`<div class="metadata">Last Updated: ${this.lastUpdated}</div>` : ``}
-      </div>
+</a>
     `;
   }
 
-  openWindow() {
-
-      window.open((this.baseURL+'/'+this.slug), '_blank');
-  }  
-
-  enter(e) {
-    if (e.key === 'Enter') {
-      this.openSlug();
-    }
-  }
 
   static get tag() {
     return "hax-card";
