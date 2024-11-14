@@ -13,6 +13,8 @@ export class HaxImage extends DDDSuper(LitElement) {
     this.logo = '';
     this.slug = '';
     this.url = '';
+    this.topLevel=false;
+    this.theme='';
   }
 
   static get properties() {
@@ -23,26 +25,47 @@ export class HaxImage extends DDDSuper(LitElement) {
       lastUpdated: { type: String },
       logo: { type: String },
       slug: { type: String },
-      url: { type: String }
+      url: { type: String },
+      topLevel: {type: Boolean, reflect: true, attribute: "top-level"},
+      theme: {type: String},
     };
   }
 
   static get styles() {
     return [super.styles, css`
-      .card {
+      .card {     
+       
+  
+        text-decoration: none;
+      }
+
+      .full-card{
         display: inline-flex;
         flex-direction: column;
         align-items: center;
-        width: 100%;
         width: 320px;
-        border-radius: var(--ddd-radius-md);
-        padding: 16px;
+        height: 512px;
+        padding: 16px; 
         background-color: var(--ddd-theme-default-potential0);
         border: 2px solid var(--ddd-theme-default-potentialMidnight);
-        height: 512px;
-        text-decoration: none;
-
+        border-radius: var(--ddd-radius-md);
       }
+
+      :host([top-level]) .full-card{
+        display:block;
+        background-color:green;
+        width: 512px;
+        height:320px;
+        
+      }
+      :host([top-level]) img{
+        width:100px;
+        height: 100px;
+        align-content:top;
+      }
+
+
+     
 
       .card:focus {
         box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
@@ -119,9 +142,11 @@ export class HaxImage extends DDDSuper(LitElement) {
   render() {
     
     if (this.logo == '') {
-      this.logo = "/files/HAX.psu%20World%20changer-circle1.png";//This changes the default image for empty strings
+      this.logo = "/files/HAX.psu%20World%20changer-circle1.png";
   }
     return html`
+      <div class = "full-card">
+      
       <a
         class="card"
         tabindex="0"
@@ -135,7 +160,9 @@ export class HaxImage extends DDDSuper(LitElement) {
         <div class="text">${this.description}</div>
         ${this.created ? html`<div class="metadata">Created: ${this.created}</div>` : ``}
         ${this.lastUpdated ? html`<div class="metadata">Last Updated: ${this.lastUpdated}</div>` : ``}
+        ${this.theme ? html`<div class="metadata">Theme: ${this.theme}</div>` : ``}
 </a>
+  </div>
     `;
   }
 

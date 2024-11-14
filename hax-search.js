@@ -13,6 +13,12 @@ export class HaxSearch extends DDDSuper(LitElement) {
     this.url = '';
     this.baseUrl = '';
     this.formattedUrl='';
+    this.siteName='';
+    this.description=''
+    this.logoo=''
+    this.createdDate=''
+    this.updatedDate=''
+    this.themeSettings=''
   }
 
 
@@ -25,7 +31,13 @@ export class HaxSearch extends DDDSuper(LitElement) {
       url: { type: String },
       baseUrl: {type: String},
       formattedUrl: {type: String},
-    };
+      siteName: {type: String},
+      description: {type: String},
+      logoo: {type: String},
+      createdDate: {type: String},
+      updatedDate: {type: String},
+      themeSettings: {type: String},
+    }
   }
 
   static get styles() {
@@ -41,10 +53,10 @@ export class HaxSearch extends DDDSuper(LitElement) {
         background-color: var(--ddd-theme-default-potential50);
         border-radius: var(--ddd-radius-rounded);
         border: 2px solid var(--ddd-theme-default-potentialMidnight);
-        padding: 5px 10px;
+        padding: var(--ddd-spacing-3);
         width: 100%;
-        max-width: 400px;
-        margin: 20px auto;
+        max-width: 500px;
+        margin: var(--ddd-spacing-4) auto;
       }
 
 
@@ -61,6 +73,14 @@ export class HaxSearch extends DDDSuper(LitElement) {
         justify-content:space-between;
         align-items: center;
         
+      }
+
+      button{
+        background-color: var(--ddd-theme-default-navy40);
+        color: var(--ddd-theme-default-potentialMidnight);
+        margin: var(--ddd-spacing-1);
+        font-size: 16px;
+
       }
 
 
@@ -87,6 +107,23 @@ export class HaxSearch extends DDDSuper(LitElement) {
         <div class="search-wrapper">
           <input id="input" class="analyze-input" placeholder="https://haxtheweb.org/site.json" @input="${this.analyze}"/>
           <div class="search-button"><button @click="${this.updateResults}">Analyze</button></div>
+        </div>
+        <div class="main-card">
+          
+          ${this.siteName ? html`
+             <hax-image
+            top-level
+            title="${this.siteName}"
+            description="${this.description}"
+            logo="${this.logoo}"
+            created="${this.createdDate}"
+            lastUpdated="${this.updatedDate}"
+            url="${this.url.replace(/\/?[^\/]*\.json$/, '')}"
+            theme="${this.themeSettings}"
+          ></hax-image>
+            
+          ` : ``}
+         
         </div>
         <div class="results">
         ${this.items.map((item) => {
@@ -155,6 +192,12 @@ export class HaxSearch extends DDDSuper(LitElement) {
       .then(data => {
           this.items = data.items
           this.loading = false;
+          this.siteName=data.title;
+          this.description=data.description;
+          this.logoo=data.metadata.site.logo;
+          this.createdDate=dateToString(data.metadata.site.created);
+          this.updatedDate=dateToString(data.metadata.site.updated);
+          this.themeSettings=data.metadata.theme.name;
       });
   }
 
