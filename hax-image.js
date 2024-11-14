@@ -11,8 +11,8 @@ export class HaxImage extends DDDSuper(LitElement) {
     this.created = '';
     this.lastUpdated = '';
     this.logo = '';
-    this.slug = 'google.com';
-    this.baseURL = 'google.com';
+    this.slug = '';
+    this.url = '';
   }
 
   static get properties() {
@@ -23,7 +23,7 @@ export class HaxImage extends DDDSuper(LitElement) {
       lastUpdated: { type: String },
       logo: { type: String },
       slug: { type: String },
-      baseURL: { type: String }
+      url: { type: String }
     };
   }
 
@@ -34,7 +34,7 @@ export class HaxImage extends DDDSuper(LitElement) {
         flex-direction: column;
         align-items: center;
         width: 100%;
-        max-width: 320px;
+        width: 320px;
         border-radius: var(--ddd-radius-md);
         padding: 16px;
         background-color: var(--ddd-theme-default-potential0);
@@ -125,11 +125,11 @@ export class HaxImage extends DDDSuper(LitElement) {
       <a
         class="card"
         tabindex="0"
-        href="${this.baseURL+'/'+this.slug}"
+        href="${this.url+'/'+this.slug}"
         target="_blank"
       >
         <div class="image-container">
-          <img src="${this.baseURL}/${this.logo}" alt="${this.title}" />
+          <img src="${this.url}/${this.logo}" alt="${this.title}" />
         </div>
         <div class="info">${this.title}</div>
         <div class="text">${this.description}</div>
@@ -141,7 +141,7 @@ export class HaxImage extends DDDSuper(LitElement) {
 
 
   static get tag() {
-    return "hax-card";
+    return "hax-image";
   }
 }
 

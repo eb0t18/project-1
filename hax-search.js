@@ -10,8 +10,9 @@ export class HaxSearch extends DDDSuper(LitElement) {
     this.title = '';
     this.loading = false;
     this.items = [];
-    this.jsonUrl = '';
-    this.baseUrl = this.noJsonEnding(this.jsonUrl);
+    this.url = '';
+    this.baseUrl = '';
+    this.formattedUrl='';
   }
 
 
@@ -21,8 +22,9 @@ export class HaxSearch extends DDDSuper(LitElement) {
       loading: { type: Boolean, reflect: true },
       items: { type: Array },
       value: { type: String },
-      jsonUrl: { type: String },
-      baseUrl: { type: String },
+      url: { type: String },
+      baseUrl: {type: String},
+      formattedUrl: {type: String},
     };
   }
 
@@ -53,6 +55,12 @@ export class HaxSearch extends DDDSuper(LitElement) {
 
       .results {
         height: 100%;
+        display: flex;
+        flex-direction:row;
+        flex-wrap: wrap;
+        justify-content:space-between;
+        align-items: center;
+        
       }
 
 
@@ -66,7 +74,8 @@ export class HaxSearch extends DDDSuper(LitElement) {
 
   analyze(e)
   {
-    this.jsonUrl = this.shadowRoot.querySelector('#input').value;
+   
+    this.url = this.shadowRoot.querySelector('#input').value;
 
   }
 
@@ -76,8 +85,8 @@ export class HaxSearch extends DDDSuper(LitElement) {
     return html`
       <h2>${this.title}</h2>
         <div class="search-wrapper">
-          <input id="input" class="analyze-input" placeholder="https://haxtheweb.org/site.json" />
-          <div class="search-button"><button @click="${this.analyze}">Analyze</button></div>
+          <input id="input" class="analyze-input" placeholder="https://haxtheweb.org/site.json" @input="${this.analyze}"/>
+          <div class="search-button"><button @click="${this.updateResults}">Analyze</button></div>
         </div>
         <div class="results">
         ${this.items.map((item) => {
@@ -86,31 +95,30 @@ export class HaxSearch extends DDDSuper(LitElement) {
           const img = item.metadata && item.metadata.files && item.metadata.files[0] ? item.metadata.files[0].url : '';
 
           return html`
-            
-            <hax-card
+            <hax-image
               created="${created}"
               lastUpdated="${updated}"
               title="${item.title}"
               description="${item.description}"
               logo="${img}"
               slug="${item.slug}"
-              baseURL="${this.baseUrl}"
-            ></hax-card>
+              url="${this.url.replace(/\/?[^\/]*\.json$/, '')}"
+            ></hax-image>
           `;
         })}
       </div>
-      
+
     `;
   }
 
   inputChanged(e) {
-    this.jsonUrl = this.shadowRoot.querySelector('#input').value;
+    this.url = this.shadowRoot.querySelector('#input').value;
   }
 
   updated(changedProperties) {
-    if (changedProperties.has('jsonUrl')) {
-      this.updateResults(this.jsonUrl);
-    } else if (changedProperties.has('jsonUrl') && !this.value) {
+    if (changedProperties.has('url')) {
+      this.updateResults(this.url);
+    } else if (changedProperties.has('url') && !this.url) {
       this.items = [];
     }
 
@@ -118,13 +126,31 @@ export class HaxSearch extends DDDSuper(LitElement) {
       console.log(this.items);
     }
   }
-  noJsonEnding(url) {
-    return url.replace(/\/?[^\/]*\.json$/, '');
-  }
+
   updateResults(value) {
-    this.loading = true;
-    this.baseUrl = this.noJsonEnding(this.jsonUrl);
-    fetch(this.jsonUrl)
+
+    this.loading=true;
+
+    this.baseUrl = this.url.replace(/^(?!https?:\/\/)(.+?)(\/?)$/, "https://$1/");
+    this.formattedUrl = '';
+    let jsonUrl ='';
+    
+    if(this.baseUrl.endsWith("site.json")){
+      console.log(1)
+      this.formattedUrl =  this.baseUrl.replace(/site\.json\/?$/, "");
+      jsonUrl = this.baseUrl;
+    } else{
+      if(this.baseUrl.endsWith("/")){
+        this.formattedUrl = this.baseUrl;
+      } else{
+        this.formattedUrl = this.baseUrl+'/';
+      }
+      
+      jsonUrl = `${this.formattedUrl}site.json`;
+      console.log(jsonUrl)
+    }
+  
+    fetch(jsonUrl)
       .then(response => response.ok ? response.json() : {})
       .then(data => {
           this.items = data.items
