@@ -19,6 +19,7 @@ export class HaxSearch extends DDDSuper(LitElement) {
     this.createdDate=''
     this.updatedDate=''
     this.themeSettings=''
+    this.hex='';
   }
 
 
@@ -37,6 +38,7 @@ export class HaxSearch extends DDDSuper(LitElement) {
       createdDate: {type: String},
       updatedDate: {type: String},
       themeSettings: {type: String},
+      hex: {type: String},
     }
   }
 
@@ -105,11 +107,12 @@ export class HaxSearch extends DDDSuper(LitElement) {
     return html`
       <h2>${this.title}</h2>
         <div class="search-wrapper">
-          <input id="input" class="analyze-input" placeholder="https://haxtheweb.org/site.json" @input="${this.analyze}"/>
+          <input id="input" class="analyze-input" placeholder="https://haxtheweb.org/site.json" @input="${this.analyze}"
+          @keydown="${(e)=>{if(e.key==='Enter'){this.updateResults();}}}"/>
+          
           <div class="search-button"><button @click="${this.updateResults}">Analyze</button></div>
         </div>
         <div class="main-card">
-          
           ${this.siteName ? html`
              <hax-image
             top-level
@@ -120,10 +123,9 @@ export class HaxSearch extends DDDSuper(LitElement) {
             lastUpdated="${this.updatedDate}"
             url="${this.url.replace(/\/?[^\/]*\.json$/, '')}"
             theme="${this.themeSettings}"
+            hex-code="${this.hex}"
           ></hax-image>
-            
           ` : ``}
-         
         </div>
         <div class="results">
         ${this.items.map((item) => {

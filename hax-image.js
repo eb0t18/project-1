@@ -15,6 +15,7 @@ export class HaxImage extends DDDSuper(LitElement) {
     this.url = '';
     this.topLevel=false;
     this.theme='';
+    this.hexCode='';
   }
 
   static get properties() {
@@ -28,14 +29,13 @@ export class HaxImage extends DDDSuper(LitElement) {
       url: { type: String },
       topLevel: {type: Boolean, reflect: true, attribute: "top-level"},
       theme: {type: String},
+      hexCode: { type: String, attribute: "hex-code"},
     };
   }
 
   static get styles() {
     return [super.styles, css`
       .card {     
-       
-  
         text-decoration: none;
       }
 
@@ -45,38 +45,52 @@ export class HaxImage extends DDDSuper(LitElement) {
         align-items: center;
         width: 320px;
         height: 512px;
-        padding: 16px; 
+        padding: 32px; 
         background-color: var(--ddd-theme-default-potential0);
         border: 2px solid var(--ddd-theme-default-potentialMidnight);
         border-radius: var(--ddd-radius-md);
+        margin-top: var(--ddd-spacing-4);
+        margin-right: var(--ddd-spacing-5)
       }
 
       :host([top-level]) .full-card{
         display:block;
-        background-color:green;
+        background-color: var(--site-hex-code, --ddd-theme-accent);
         width: 512px;
         height:320px;
+        margin-top: var(--ddd-spacing-3);
+        align-content:center;
+        justify-content:center;
+    
         
       }
       :host([top-level]) img{
         width:100px;
         height: 100px;
         align-content:top;
+      
       }
 
+      :host([top-level]) .image-container{
+        aspect-ratio:unset;
+      }
 
-     
-
-      .card:focus {
-        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
-        background-color: var(--ddd-theme-default-navy40);
+      .card:hover{
         text-decoration:none;
       }
+      .card:focus{
+        text-decoration:none;
+      }
+     
+
+      .full-card:focus {
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+        background-color: var(--ddd-theme-default-navy40);
+      }
   
-      .card:hover {
+      .full-card:hover {
         box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
         background-color: var(--ddd-theme-default-skyMaxLight);
-        text-decoration: none;
       }
       .image-container {
         width: 100%;
@@ -99,8 +113,7 @@ export class HaxImage extends DDDSuper(LitElement) {
       }
       .info {
         margin-top: var(--ddd-spacing-3);
-        font-size: var(--ddd-font-size-xl);
-        font: var(--ddd-font-primary);
+        font-size: var(--ddd-font-size-m);
         font-weight: var(--ddd-font-weight-regular);
         color: var(--ddd-theme-default-navy80);
         text-align: center;
@@ -109,8 +122,7 @@ export class HaxImage extends DDDSuper(LitElement) {
       }
   
       .text {
-        font-size: var(--ddd-font-size-m);
-        font: var(--ddd-font-primary);
+        font-size: 20px;
         font-weight: var(--ddd-font-weight-regular);
         color: var(--ddd-theme-default-potential-50);
         margin-top: 8px;
