@@ -1,8 +1,9 @@
 import { LitElement, html, css } from "lit";
 import { DDDSuper } from "@haxtheweb/d-d-d/d-d-d.js";
+import { I18NMixin } from "@haxtheweb/i18n-manager/lib/I18NMixin.js";
 
 
-export class HaxImage extends DDDSuper(LitElement) {
+export class HaxImage extends DDDSuper(I18NMixin(LitElement)) {
 
   constructor() {
     super();
@@ -35,6 +36,7 @@ export class HaxImage extends DDDSuper(LitElement) {
 
   static get styles() {
     return [super.styles, css`
+
       .card {     
         text-decoration: none;
       }
@@ -50,7 +52,8 @@ export class HaxImage extends DDDSuper(LitElement) {
         border: 2px solid var(--ddd-theme-default-potentialMidnight);
         border-radius: var(--ddd-radius-md);
         margin-top: var(--ddd-spacing-4);
-        margin-right: var(--ddd-spacing-5)
+        margin-right: var(--ddd-spacing-5);
+        
       }
 
       :host([top-level]) .full-card{
