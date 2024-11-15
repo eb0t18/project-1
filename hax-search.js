@@ -98,6 +98,7 @@ export class HaxSearch extends DDDSuper(LitElement) {
   {
    
     this.url = this.shadowRoot.querySelector('#input').value;
+    this.updateResults();
 
   }
 
@@ -107,10 +108,10 @@ export class HaxSearch extends DDDSuper(LitElement) {
     return html`
       <h2>${this.title}</h2>
         <div class="search-wrapper">
-          <input id="input" class="analyze-input" placeholder="https://haxtheweb.org/site.json" @input="${this.analyze}"
-          @keydown="${(e)=>{if(e.key==='Enter'){this.updateResults();}}}"/>
+          <input id="input" class="analyze-input" placeholder="https://haxtheweb.org/site.json"
+          @keydown="${(e)=>{if(e.key==='Enter'){this.analyze}}}"/>
           
-          <div class="search-button"><button @click="${this.updateResults}">Analyze</button></div>
+          <div class="search-button"><button @click="${this.analyze}">Analyze</button></div>
         </div>
         <div class="main-card">
           ${this.siteName ? html`
@@ -123,7 +124,7 @@ export class HaxSearch extends DDDSuper(LitElement) {
             lastUpdated="${this.updatedDate}"
             url="${this.url.replace(/\/?[^\/]*\.json$/, '')}"
             theme="${this.themeSettings}"
-            hex-code="${this.hex}"
+            hexCode="${this.hex}"
           ></hax-image>
           ` : ``}
         </div>
@@ -150,21 +151,7 @@ export class HaxSearch extends DDDSuper(LitElement) {
     `;
   }
 
-  inputChanged(e) {
-    this.url = this.shadowRoot.querySelector('#input').value;
-  }
 
-  updated(changedProperties) {
-    if (changedProperties.has('url')) {
-      this.updateResults(this.url);
-    } else if (changedProperties.has('url') && !this.url) {
-      this.items = [];
-    }
-
-    if (changedProperties.has('items') && this.items.length > 0) {
-      console.log(this.items);
-    }
-  }
 
   updateResults(value) {
 
@@ -197,9 +184,11 @@ export class HaxSearch extends DDDSuper(LitElement) {
           this.siteName=data.title;
           this.description=data.description;
           this.logoo=data.metadata.site.logo;
-          this.createdDate=dateToString(data.metadata.site.created);
-          this.updatedDate=dateToString(data.metadata.site.updated);
           this.themeSettings=data.metadata.theme.name;
+          this.hex=data.metadata.theme.hexCode;
+          this.createdDate=data.metadata ? new Date(parseInt(data.metadata.created)* 1000).toLocaleDateString() : '';
+          this.updatedDate=data.metadata ? new Date(parseInt(data.metadata.updated)* 1000).toLocaleDateString() : '';
+       
       });
   }
 
