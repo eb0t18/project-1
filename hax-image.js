@@ -16,7 +16,6 @@ export class HaxImage extends DDDSuper(I18NMixin(LitElement)) {
     this.url = '';
     this.topLevel=false;
     this.theme='';
-    this.hexCode='';
   }
 
   static get properties() {
@@ -30,7 +29,6 @@ export class HaxImage extends DDDSuper(I18NMixin(LitElement)) {
       url: { type: String },
       topLevel: {type: Boolean, reflect: true, attribute: "top-level"},
       theme: {type: String},
-      hexCode: { type: String},
     };
   }
 
@@ -53,17 +51,19 @@ export class HaxImage extends DDDSuper(I18NMixin(LitElement)) {
         border-radius: var(--ddd-radius-md);
         margin-top: var(--ddd-spacing-4);
         margin-right: var(--ddd-spacing-5);
+        margin-left: var(--ddd-spacing-5);
         
       }
 
       :host([top-level]) .full-card{
         display:block;
-        background-color: var(--site-hex-code, #ffffff);
-        width: 512px;
-        height:320px;
+        background-color: var(--global-hex-color, #ffffff);
+        width: unset;
+        height:unset;
         margin-top: var(--ddd-spacing-3);
-        align-content:center;
-        justify-content:center;
+        margin-right: var(--ddd-spacing-10);
+        margin-left: var(--ddd-spacing-10);
+        
     
         
       }
@@ -161,7 +161,7 @@ export class HaxImage extends DDDSuper(I18NMixin(LitElement)) {
       this.logo = "/files/HAX.psu%20World%20changer-circle1.png";
   }
     return html`
-      <div class = "full-card" style="--site-hex-code: ${this.hexCode};">
+      <div class = "full-card">
       <a
         class="card"
         href="${this.url+'/'+this.slug}"

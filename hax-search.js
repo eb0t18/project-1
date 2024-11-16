@@ -14,12 +14,11 @@ export class HaxSearch extends DDDSuper(LitElement) {
     this.baseUrl = '';
     this.formattedUrl='';
     this.siteName='';
-    this.description=''
-    this.logoo=''
-    this.createdDate=''
-    this.updatedDate=''
-    this.themeSettings=''
-    this.hex='';
+    this.description='';
+    this.logoo='';
+    this.createdDate='';
+    this.updatedDate='';
+    this.themeSettings='';
   }
 
 
@@ -38,7 +37,6 @@ export class HaxSearch extends DDDSuper(LitElement) {
       createdDate: {type: String},
       updatedDate: {type: String},
       themeSettings: {type: String},
-      hex: {type: String},
     }
   }
 
@@ -46,6 +44,7 @@ export class HaxSearch extends DDDSuper(LitElement) {
     return [super.styles, css`
       :host {
         display: block;
+      
       }
 
       .search-wrapper {
@@ -124,7 +123,6 @@ export class HaxSearch extends DDDSuper(LitElement) {
             lastUpdated="${this.updatedDate}"
             url="${this.url.replace(/\/?[^\/]*\.json$/, '')}"
             theme="${this.themeSettings}"
-            hexCode="${this.hex}"
           ></hax-image>
           ` : ``}
         </div>
@@ -185,11 +183,20 @@ export class HaxSearch extends DDDSuper(LitElement) {
           this.description=data.description;
           this.logoo=data.metadata.site.logo;
           this.themeSettings=data.metadata.theme.name;
-          this.hex=data.metadata.theme.hexCode;
+          this.updateGlobalHexColor(data);
           this.createdDate=data.metadata ? new Date(parseInt(data.metadata.created)* 1000).toLocaleDateString() : '';
           this.updatedDate=data.metadata ? new Date(parseInt(data.metadata.updated)* 1000).toLocaleDateString() : '';
        
       });
+  
+  }
+  updateGlobalHexColor(data) {
+    if (data.metadata && data.metadata.theme && data.metadata.theme.variables) {
+      const hexCode = data.metadata.theme.variables.hexCode;
+      document.documentElement.style.setProperty('--global-hex-color', hexCode);
+    } else {
+      console.log('Hex Code not found');
+    }
   }
 
 
