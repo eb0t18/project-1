@@ -85,13 +85,14 @@ export class HaxImage extends DDDSuper(I18NMixin(LitElement)) {
       .card:focus{
         text-decoration:none;
         outline:none;
+        box-shadow: var(--ddd-boxShadow-lg);
+        background-color:var(--ddd-theme-default-skyMaxLight);
       }
      
 
       .full-card:focus {
         box-shadow: var(--ddd-boxShadow-lg);
-        background-color: var(--ddd-theme-default-navy40);
-        border: 4px solid var(--ddd-theme-default-navy40);
+        background-color:var(--ddd-theme-default-skyMaxLight);
       }
   
       .full-card:hover {
