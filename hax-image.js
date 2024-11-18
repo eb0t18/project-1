@@ -5,6 +5,7 @@ import { I18NMixin } from "@haxtheweb/i18n-manager/lib/I18NMixin.js";
 
 export class HaxImage extends DDDSuper(I18NMixin(LitElement)) {
 
+  
   constructor() {
     super();
     this.title = '';
@@ -57,7 +58,7 @@ export class HaxImage extends DDDSuper(I18NMixin(LitElement)) {
 
       :host([top-level]) .full-card{
         display:block;
-        background-color: var(--global-hex-color, #ffffff);
+        background-color: var(--hex-value, #ffffff);
         width: unset;
         height:unset;
         margin-top: var(--ddd-spacing-3);
@@ -74,7 +75,7 @@ export class HaxImage extends DDDSuper(I18NMixin(LitElement)) {
       
       }
 
-      :host([top-level]) .image-container{
+      :host([top-level]) .image-wrapper{
         aspect-ratio:unset;
       }
 
@@ -88,15 +89,16 @@ export class HaxImage extends DDDSuper(I18NMixin(LitElement)) {
      
 
       .full-card:focus {
-        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+        box-shadow: var(--ddd-boxShadow-lg);
         background-color: var(--ddd-theme-default-navy40);
+        border: 4px solid var(--ddd-theme-default-navy40);
       }
   
       .full-card:hover {
-        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+        box-shadow: var(--ddd-boxShadow-lg);
         background-color: var(--ddd-theme-default-skyMaxLight);
       }
-      .image-container {
+      .image-wrapper {
         width: 100%;
         aspect-ratio: 1.618; 
         overflow: hidden;
@@ -144,12 +146,13 @@ export class HaxImage extends DDDSuper(I18NMixin(LitElement)) {
       }
   
       @media (max-width: 600px) {
-        .card {
+        .full-card {
           width: 100%;
           max-width: 100%;
-          padding: 12px;
+          padding: 16px;
           height: auto; 
         }
+        
       }
     `];
   }
@@ -167,7 +170,7 @@ export class HaxImage extends DDDSuper(I18NMixin(LitElement)) {
         href="${this.url+'/'+this.slug}"
         target="_blank"
       >
-        <div class="image-container">
+        <div class="image-wrapper">
           <img src="${this.url}/${this.logo}" alt="${this.title}" />
         </div>
         <div class="info">${this.title}</div>

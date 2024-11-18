@@ -1,8 +1,9 @@
 import { LitElement, html, css } from 'lit';
 import { DDDSuper } from "@haxtheweb/d-d-d/d-d-d.js";
+import { I18NMixin } from "@haxtheweb/i18n-manager/lib/I18NMixin.js";
 import "./hax-image.js";
 
-export class HaxSearch extends DDDSuper(LitElement) {
+export class HaxSearch extends DDDSuper(I18NMixin(LitElement)) {
   
   constructor() {
     super();
@@ -19,6 +20,7 @@ export class HaxSearch extends DDDSuper(LitElement) {
     this.createdDate='';
     this.updatedDate='';
     this.themeSettings='';
+    this.display = '';
   }
 
 
@@ -37,7 +39,8 @@ export class HaxSearch extends DDDSuper(LitElement) {
       createdDate: {type: String},
       updatedDate: {type: String},
       themeSettings: {type: String},
-    }
+      display: {type: String},
+    };
   }
 
   static get styles() {
@@ -90,6 +93,16 @@ export class HaxSearch extends DDDSuper(LitElement) {
         line-height: var(--ddd-lh-auto);
         width: 100%;
       }
+
+      @media (max-width: 600px) {
+        .input {
+          width: 100%;
+          max-width: 100%;
+          padding: 16px;
+          height: auto; 
+        }
+        
+      }
     `];
   }
 
@@ -112,6 +125,7 @@ export class HaxSearch extends DDDSuper(LitElement) {
           
           <div class="search-button"><button @click="${this.analyze}">Analyze</button></div>
         </div>
+        <div class = "error"><h2>${this.display}</h2></div>
         <div class="main-card">
           ${this.siteName ? html`
              <hax-image
@@ -149,12 +163,9 @@ export class HaxSearch extends DDDSuper(LitElement) {
     `;
   }
 
-
-
   updateResults(value) {
 
     this.loading=true;
-
     this.baseUrl = this.url.replace(/^(?!https?:\/\/)(.+?)(\/?)$/, "https://$1/");
     this.formattedUrl = '';
     let jsonUrl ='';
@@ -183,19 +194,27 @@ export class HaxSearch extends DDDSuper(LitElement) {
           this.description=data.description;
           this.logoo=data.metadata.site.logo;
           this.themeSettings=data.metadata.theme.name;
-          this.updateGlobalHexColor(data);
-          this.createdDate=data.metadata ? new Date(parseInt(data.metadata.created)* 1000).toLocaleDateString() : '';
-          this.updatedDate=data.metadata ? new Date(parseInt(data.metadata.updated)* 1000).toLocaleDateString() : '';
+          this.setHex(data);
+          this.display="";
+          this.createdDate=new Date(parseInt(data.metadata.created)* 1000).toLocaleDateString();
+          this.updatedDate=new Date(parseInt(data.metadata.updated)* 1000).toLocaleDateString();
+         
        
+      })
+      .catch(error =>{
+        this.loading = false;
+        this.items = [];
+        console.log('Fetch not processed');
+        this.display = "Site not fetched. Please use a valid url. "
       });
   
   }
-  updateGlobalHexColor(data) {
-    if (data.metadata && data.metadata.theme && data.metadata.theme.variables) {
+  setHex(data) {
+    if (data.metadata.theme.variables) {
       const hexCode = data.metadata.theme.variables.hexCode;
-      document.documentElement.style.setProperty('--global-hex-color', hexCode);
+      document.documentElement.style.setProperty('--hex-value', hexCode);
     } else {
-      console.log('Hex Code not found');
+      console.log('Cannot find hex value.');
     }
   }
 
