@@ -196,8 +196,8 @@ export class HaxSearch extends DDDSuper(I18NMixin(LitElement)) {
           this.themeSettings=data.metadata.theme.name;
           this.setHex(data);
           this.display="";
-          this.createdDate=new Date(parseInt(data.metadata.created)* 1000).toLocaleDateString();
-          this.updatedDate=new Date(parseInt(data.metadata.updated)* 1000).toLocaleDateString();
+          this.createdDate=new Date(parseInt(data.metadata.site.created)* 1000).toLocaleDateString();
+          this.updatedDate=new Date(parseInt(data.metadata.site.updated)* 1000).toLocaleDateString();
          
        
       })
